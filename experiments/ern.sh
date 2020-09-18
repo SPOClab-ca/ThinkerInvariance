@@ -1,0 +1,29 @@
+#!/bin/bash
+
+DATASET="ERN"
+EWMA=15
+MIXUP=8.0
+
+RESULTS_TOPLEVEL="results"
+
+function run_ern() {
+    RESULTS_SUFFIX=$1
+    MODEL=$2
+
+    RESULTS_PREFIX="$RESULTS_TOPLEVEL/eog_free/$RESULTS_SUFFIX"
+    ./experiments/_tidnet_basic.sh $DATASET $BATCH_SIZE $EPOCHS $EWMA $MIXUP $RESULTS_PREFIX $MODEL
+
+    RESULTS_PREFIX="$RESULTS_TOPLEVEL/all/$RESULTS_SUFFIX"
+    ./experiments/_tidnet_basic.sh $DATASET $BATCH_SIZE $EPOCHS $EWMA $MIXUP $RESULTS_PREFIX "$MODEL --include-eog"
+
+    RESULTS_PREFIX="$RESULTS_TOPLEVEL/eog_ica/$RESULTS_SUFFIX"
+    ./experiments/_tidnet_basic.sh $DATASET $BATCH_SIZE $EPOCHS $EWMA $MIXUP $RESULTS_PREFIX "$MODEL --ica-eog"
+}
+
+BATCH_SIZE=4
+EPOCHS=20
+run_ern ERN/loso-TIDnet TIDNet
+
+EPOCHS=100
+BATCH_SIZE=32
+run_ern ERN/loso-EEGNet EEGNet

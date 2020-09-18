@@ -1,0 +1,29 @@
+#!/bin/bash
+
+DATASET="P300"
+BATCH_SIZE=16
+EPOCHS=20
+EWMA=3
+MIXUP=8.0
+RESULTS_TOPLEVEL="results"
+
+function run_p300() {
+    RESULTS_SUFFIX=$1
+    MODEL=$2
+
+    RESULTS_PREFIX="$RESULTS_TOPLEVEL/eog_free/$RESULTS_SUFFIX"
+    ./experiments/_tidnet_basic.sh $DATASET $BATCH_SIZE $EPOCHS $EWMA $MIXUP $RESULTS_PREFIX $MODEL
+
+    RESULTS_PREFIX="$RESULTS_TOPLEVEL/all/$RESULTS_SUFFIX"
+    ./experiments/_tidnet_basic.sh $DATASET $BATCH_SIZE $EPOCHS $EWMA $MIXUP $RESULTS_PREFIX "$MODEL --include-eog"
+
+    RESULTS_PREFIX="$RESULTS_TOPLEVEL/eog_ica/$RESULTS_SUFFIX"
+    ./experiments/_tidnet_basic.sh $DATASET $BATCH_SIZE $EPOCHS $EWMA $MIXUP $RESULTS_PREFIX "$MODEL --ica-eog"
+
+    RESULTS_PREFIX="$RESULTS_TOPLEVEL/drop_ref/$RESULTS_SUFFIX"
+    ./experiments/_tidnet_basic.sh $DATASET $BATCH_SIZE $EPOCHS $EWMA $MIXUP $RESULTS_PREFIX $MODEL "--drop-ref"
+}
+
+run_p300 p300-multi/loso-TIDnet TIDNet
+
+run_p300 p300-multi/loso-EEGNet EEGNet
