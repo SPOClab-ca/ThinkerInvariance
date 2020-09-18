@@ -3,7 +3,7 @@
 This repository contains all of the source code used to train, test, evaluate and compare 
 all of the deep learning models that make up the work from 
 _Thinker Invariance: Enabling Deep Neural Networks for BCI Across More People_ written by 
-Kostas and Rudzicz (under review).
+Kostas and Rudzicz (<https://doi.org/10.1088/1741-2552/abb7a7>).
 
 To reproduce results from each of the datasets, the *./experiments* directory contains BASH
 scripts that should be sufficient. Similarly, the *./analysis* directory should provide all
